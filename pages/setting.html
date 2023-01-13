@@ -1,0 +1,91 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport"
+			content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<style>
+			#app {
+				margin-top: 45px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">设置</h1>
+		</header>
+		<div id="app">
+			{{name}}
+			<button @click='readNews' type="button" class="mui-btn">默认</button>
+		</div>
+	</body>
+	<script src="../js/vue.js"></script>
+	<script src="../js/mui.min.js"></script>
+	<script type="text/javascript">
+		const App = new Vue({
+			el: '#app',
+			data() {
+				return {
+					name: 'hello'
+				}
+			},
+			mounted() {
+				mui.plusReady(() => {
+
+
+					mui.init({
+
+					});
+
+
+				})
+			},
+			methods: {
+				createFile() {
+					console.log('createFile')
+				},
+				readNews(callback) {
+					// http://t.zoukankan.com/henxiao25-p-9615538.html
+					// callback = callback || mui.noop;
+					plus.io.requestFileSystem(plus.io.PRIVATE_DOC, function(fs) {
+						// fs.root是根目录操作对象DirectoryEntry
+						//console.log("url="+fs.toURL());
+						fs.root.getFile('shiquan.json', { create: true }, function(fileEntry) {
+							fileEntry.file(function(file) {
+								console.log(file.size + '--' + file.name);
+								var fileReader = new plus.io.FileReader();
+								console.log("getFile:" + JSON.stringify(file));
+								fileReader.readAsText(file, 'utf-8');
+								fileReader.onloadend = function(evt) {
+									console.log("11" + evt);
+									console.log("evt.target" + evt.target);
+									console.log(evt.target.result);
+
+									let news = [];
+									var result = evt.target.result;
+									if (result != "")
+										news = JSON.parse(result);
+									// callback({
+									// 	state: 1,
+									// 	message: "读取成功！",
+									// 	data: news
+									// });
+								}
+							});
+						});
+					}, function(e) {
+						// callback({
+						// 	state: -1,
+						// 	message: e.message
+						// });
+					});
+				},
+			}
+		})
+	</script>
+</html>
