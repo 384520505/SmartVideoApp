@@ -1,16 +1,93 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
-    <title></title>
-    <script src="js/mui.min.js"></script>
-    <link href="css/mui.min.css" rel="stylesheet"/>
-    <script type="text/javascript" charset="utf-8">
-      	mui.init();
-    </script>
-</head>
-<body>
-	
-</body>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport"
+			content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>mui</title>
+		<link rel="stylesheet" href="css/common.css">
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="css/index/index.css">
+		<style>
+			.content {
+				position: relative;
+			}
+			.ezvizvideo{
+				position: absolute;
+			}
+			.coverplate{
+				top: 0%;
+				left: 0%;
+				position: absolute;
+				background: transparent;
+				width: 100%;
+				height: 100%;
+				color: white;
+				padding: 0.3125rem;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="app">
+			<div class="content">
+				<div id="ezvizvideo"></div>
+				<div class="coverplate">
+					<div class="status">
+						{{app}}
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="js/vue.js"></script>
+	<script src="js/mui.min.js"></script>
+	<script src="js/ezuikit.js"></script>
+	<script src="js/flexible.js"></script>
+	<script type="text/javascript" charset="utf-8">
+		const App = new Vue({
+			el: '#app',
+			data() {
+				return {
+					app: 'smartVideo'
+				}
+			},
+			mounted() {
+				mui.plusReady(() => {
+					// 强制app横屏显示
+					plus.screen.lockOrientation("landscape-primary");
+					// 全屏显示，隐藏手机状态栏
+					plus.navigator.setFullscreen(true);
+
+					mui.init({
+
+					});
+					this.initVideo()
+				})
+			},
+			methods: {
+				test: () => {
+					alert('hello');
+				},
+				// 初始化监控视频
+				initVideo() {
+					const width = document.documentElement.clientWidth;
+					const height = document.documentElement.clientHeight;
+					//获取萤石token
+					this.player = new EZUIKit.EZUIKitPlayer({
+						autoplay: true, // 默认播放
+						id: "ezvizvideo",
+						accessToken: 'at.2b9m6ox38ywbt35g3dttg6p3c47ry4af-709mkt98bk-1sfg9r5-ocu4okflh',
+						url: 'ezopen://UDMIQY@open.ys7.com/G82459505/1.live',
+						template: "simple",
+						width: width,
+						height: height,
+						handleSuccess: (e) => {
+							console.log('播放成功')
+						}
+					});
+				}
+			},
+
+		})
+	</script>
 </html>
