@@ -16,31 +16,60 @@
 
 	<body>
 		<header class="mui-bar mui-bar-nav">
-			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
 			<h1 class="mui-title">设置</h1>
 		</header>
 		<div id="app">
-			{{name}}
-			<button @click='readNews' type="button" class="mui-btn">默认</button>
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell">高清画质
+					<div id="quality" class="mui-switch mui-switch-mini">
+						<div class="mui-switch-handle"></div>
+					</div>
+				</li>
+				<li class="mui-table-view-cell">打开蓝牙
+					<div id="openBluetooth" class="mui-switch mui-switch-mini">
+						<div class="mui-switch-handle"></div>
+					</div>
+				</li>
+			</ul>
+			<button @click='updateContent' type="button" class="mui-btn">默认</button>
 		</div>
 	</body>
 	<script src="../js/vue.js"></script>
 	<script src="../js/mui.min.js"></script>
+	<script src="../js/tools.js"></script>
 	<script type="text/javascript">
 		const App = new Vue({
 			el: '#app',
 			data() {
 				return {
-					name: 'hello'
+					name: 'hello',
+					file: '',
 				}
 			},
 			mounted() {
 				mui.plusReady(() => {
+					const { initSwitchStatus } = Tools();
 
 
-					mui.init({
+					mui.init({});
 
-					});
+					// 初始化开关状态
+					initSwitchStatus();
+
+					// 高清画质开关
+					document.getElementById("quality").addEventListener("toggle", function(event) {
+						if (event.detail.isActive) {
+							console.log("你启动了开关");
+							plus.nativeUI.confirm('打开高清画质，将增加延迟！', (event) => {
+								if (!event.index) return;
+								mui("#quality").switch().toggle();
+							}, '提醒', ['确定', '取消']);
+
+						} else {
+							console.log("你关闭了开关");
+						}
+					})
+
 
 
 				})
@@ -49,41 +78,44 @@
 				createFile() {
 					console.log('createFile')
 				},
-				readNews(callback) {
-					// http://t.zoukankan.com/henxiao25-p-9615538.html
-					// callback = callback || mui.noop;
-					plus.io.requestFileSystem(plus.io.PRIVATE_DOC, function(fs) {
-						// fs.root是根目录操作对象DirectoryEntry
-						//console.log("url="+fs.toURL());
-						fs.root.getFile('shiquan.json', { create: true }, function(fileEntry) {
-							fileEntry.file(function(file) {
-								console.log(file.size + '--' + file.name);
-								var fileReader = new plus.io.FileReader();
-								console.log("getFile:" + JSON.stringify(file));
-								fileReader.readAsText(file, 'utf-8');
-								fileReader.onloadend = function(evt) {
-									console.log("11" + evt);
-									console.log("evt.target" + evt.target);
-									console.log(evt.target.result);
+				writeNewFile() {
+					const {
+						writeFile
+					} = Tools();
+					this.file = writeFile('{"quality":"SD"}')
+					this.file
+						.then(res => {
+							console.log(res)
+						})
+						.catch(err => {
+							console.log(err)
+						})
 
-									let news = [];
-									var result = evt.target.result;
-									if (result != "")
-										news = JSON.parse(result);
-									// callback({
-									// 	state: 1,
-									// 	message: "读取成功！",
-									// 	data: news
-									// });
-								}
-							});
-						});
-					}, function(e) {
-						// callback({
-						// 	state: -1,
-						// 	message: e.message
-						// });
-					});
+				},
+				readNewFile() {
+					const {
+						readFile
+					} = Tools();
+					this.file = readFile();
+					this.file
+						.then(res => {
+							console.log(res)
+						})
+						.catch(err => {
+							console.log(err)
+						})
+				},
+				updateContent() {
+					const {
+						updateContentToFile
+					} = Tools();
+					updateContentToFile('quality','true')
+						.then(res => {
+							console.log(res);
+						})
+						.catch(err => {
+							console.log(err);
+						})
 				},
 			}
 		})
