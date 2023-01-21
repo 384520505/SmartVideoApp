@@ -97,8 +97,15 @@
                     "ipad" : {}
                 },
                 "android" : {}
+            },
+            "ios" : {
+                "dSYMs" : false
+            },
+            "plugins" : {
+                "ad" : {}
             }
         }
     },
-    "screenOrientation" : [ "landscape-primary" ]
+    "screenOrientation" : [ "landscape-primary" ],
+    "fullscreen" : true
 }

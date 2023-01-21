@@ -1,4 +1,5 @@
 # SmartVideoApp
+-[](https://blog.csdn.net/bosaidongmomo/article/details/128092710)
 
 # study to commit a project on github for MacOS
 - 1.brew install git

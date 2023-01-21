@@ -21,12 +21,12 @@ function Tools() {
 		}
 	};
 
-	// 初始化侧滑菜单页
-	const initSidePage = (url, id) => {
+	// 初始化页面
+	const initPage = (url, id) => {
 		let SidePage = mui.preload({
 			url,
 			id,
-			styles: {
+			styles:{
 				right: '0',
 				width: "40%",
 			},
@@ -90,7 +90,7 @@ function Tools() {
 						fileReader.readAsText(file, 'utf-8');
 						fileReader.onloadend = event => {
 							console.log(event.target.result);
-							resolve(event.target.result)
+							resolve(JSON.parse(event.target.result))
 						}
 					}, (error) => {
 						reject('获取文件失败')
@@ -111,7 +111,7 @@ function Tools() {
 			// 更新内容到文件
 			oldcontent[obj] = value;
 			console.log(oldcontent[obj])
-			const msg = await writeFile(oldcontent);
+			const msg = await writeFile(JSON.stringify(oldcontent));
 			resolve(msg);
 		})
 	};
@@ -128,14 +128,56 @@ function Tools() {
 				console.log(err)
 			})
 	};
+	
+	// 初始化视频
+	const initVideo = async ()=>{
+		const width = document.documentElement.clientWidth;
+		const height = document.documentElement.clientHeight;
+		console.log(width)
+		console.log(height)
+		let url = VideoUrl;
+		let player = null;
+		
+		// 获取视频的token
+		const { getAccessToken }  = AjaxObj();
+		const { accessToken } = await getAccessToken;
+		const Token = accessToken;
+		
+		// 读取视频画质
+		const quality = await readFile()
+			.then(res => {
+				const { quality } = JSON.parse(res);
+				return quality;
+			})
+			.catch(err => {
+				console.log(err)
+				return 'false'; //视频画质默认为标清
+			})
+		console.log(quality);
+		if (quality === 'true'){
+			url = VideoUrlHD;
+		}
+		player = new EZUIKit.EZUIKitPlayer({
+			autoplay: true, // 默认播放
+			id: "ezvizvideo",
+			accessToken:'ra.5ad366gj0rhftupybfswuxkl05at60dc-709mw1t2bu-1hbsqpw-dxabhgcpk',
+			url:'ezopen://open.ys7.com/G39444019/1.live',
+			template: "simple",
+			width,
+			height,
+			handleSuccess: (e) => {}
+		});
+		return player;
+	}
 
 	return {
 		getNetStaus,
-		initSidePage,
+		initPage,
 		isExist,
 		writeFile,
 		readFile,
 		updateContentToFile,
 		initSwitchStatus,
+		initVideo
 	};
 }

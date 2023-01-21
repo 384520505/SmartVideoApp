@@ -31,7 +31,6 @@
 					</div>
 				</li>
 			</ul>
-			<button @click='updateContent' type="button" class="mui-btn">默认</button>
 		</div>
 	</body>
 	<script src="../js/vue.js"></script>
@@ -48,31 +47,46 @@
 			},
 			mounted() {
 				mui.plusReady(() => {
-					const { initSwitchStatus } = Tools();
+					const { initSwitchStatus, updateContentToFile } = Tools();
 
-
+					
 					mui.init({});
-
+					
 					// 初始化开关状态
 					initSwitchStatus();
 
 					// 高清画质开关
-					document.getElementById("quality").addEventListener("toggle", function(event) {
+					document.getElementById("quality").addEventListener("toggle", (event)=>{
 						if (event.detail.isActive) {
 							console.log("你启动了开关");
 							plus.nativeUI.confirm('打开高清画质，将增加延迟！', (event) => {
-								if (!event.index) return;
-								mui("#quality").switch().toggle();
+								console.log(event.index)
+								if (event.index) {
+									mui("#quality").switch().toggle();
+									return;
+								}else{
+									updateContentToFile('quality', 'true');
+									return;
+								}
+								
 							}, '提醒', ['确定', '取消']);
 
 						} else {
+							updateContentToFile('quality', 'false');
 							console.log("你关闭了开关");
 						}
+					});
+					
+					// 蓝牙开关
+					document.getElementById('openBluetooth').addEventListener('toggle',(event)=>{
+						console.log('蓝牙开关')
+						let videoPage = plus.webview.getWebviewById('video');
+						mui.fire(videoPage,'videoQuality',{quality:true});
 					})
 
 
-
-				})
+ 
+				})  
 			},
 			methods: {
 				createFile() {
