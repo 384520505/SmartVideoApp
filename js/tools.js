@@ -1,24 +1,68 @@
 function Tools() {
+	// 日志打印
+	/*
+	日志等级 ：level: device, error, message, 
+	device:橙色字体， class:log-device
+	error:红色字体，class:log-error
+	message:白色字体，class:log-message
+	*/
+	const printLog = (obj)=>{
+		let { level, text } = obj;
+		level = level || 'message';
+		const log = document.getElementById('log');
+		const span = document.createElement('span');
+		span.innerText = `->${text}`;
+		switch (level){
+			case 'device':
+				span.setAttribute('class', 'log-device');
+				break;
+			case 'error':
+				span.setAttribute('class', 'log-error');
+				break;
+			case 'message':
+				span.setAttribute('class', 'log-message');
+				break;
+			default:
+				break;
+		}
+		if(!span) return;
+		log.appendChild(span);
+		log.scrollTop = log.scrollHeight;
+	}
+	
 	// 获取网络状态
 	const getNetStaus = () => {
 		const netType = plus.networkinfo.getCurrentType();
+		let net = null;
 		if (netType === plus.networkinfo.CONNECTION_NONE) {
+			net = 'no net';
 			mui.toast("无网络连接！", {
 				duration: 1500,
 				type: "div"
 			})
 		} else if (netType === plus.networkinfo.CONNECTION_CELL2G || netType === plus.networkinfo
 			.CONNECTION_CELL3G) {
+			net = '3G';
 			mui.toast("当前网络状态较差！", {
 				duration: 1500,
 				type: "div"
 			})
 		} else {
+			net = 'net is contacted';
 			mui.toast("网络状态良好！", {
 				duration: 1500,
 				type: "div"
 			})
 		}
+		printLog({level:'device', text:net});
+		return net;
+	};
+	
+	// 图标切换器
+	const imgToggle = (id, newImgUrl)=>{
+		const el = document.getElementById(id);
+		el.setAttribute('src',newImgUrl);
+		return;
 	};
 
 	// 初始化页面
@@ -133,15 +177,13 @@ function Tools() {
 	const initVideo = async ()=>{
 		const width = document.documentElement.clientWidth;
 		const height = document.documentElement.clientHeight;
-		console.log(width)
-		console.log(height)
 		let url = VideoUrl;
 		let player = null;
 		
 		// 获取视频的token
-		const { getAccessToken }  = AjaxObj();
-		const { accessToken } = await getAccessToken;
-		const Token = accessToken;
+		// const { getAccessToken }  = AjaxObj();
+		// const { accessToken } = await getAccessToken;
+		// const Token = accessToken;
 		
 		// 读取视频画质
 		const quality = await readFile()
@@ -165,12 +207,17 @@ function Tools() {
 			template: "simple",
 			width,
 			height,
-			handleSuccess: (e) => {}
+			handleSuccess: (e) => {
+				printLog({ text:'视频初始化成功！'})
+			}
 		});
 		return player;
-	}
+	};
+	
+	
 
 	return {
+		printLog,
 		getNetStaus,
 		initPage,
 		isExist,
@@ -178,6 +225,7 @@ function Tools() {
 		readFile,
 		updateContentToFile,
 		initSwitchStatus,
-		initVideo
+		initVideo,
+		imgToggle
 	};
 }

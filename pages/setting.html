@@ -48,6 +48,8 @@
 			mounted() {
 				mui.plusReady(() => {
 					const { initSwitchStatus, updateContentToFile } = Tools();
+					
+					let videoPage = plus.webview.getWebviewById('video');
 
 					
 					mui.init({});
@@ -56,23 +58,27 @@
 					initSwitchStatus();
 
 					// 高清画质开关
-					document.getElementById("quality").addEventListener("toggle", (event)=>{
+					document.getElementById("quality").addEventListener("toggle", async (event)=>{
+						console.log(event.detail.isActive)
 						if (event.detail.isActive) {
 							console.log("你启动了开关");
-							plus.nativeUI.confirm('打开高清画质，将增加延迟！', (event) => {
+							plus.nativeUI.confirm('打开高清画质，将增加延迟！', async (event) => {
 								console.log(event.index)
 								if (event.index) {
 									mui("#quality").switch().toggle();
 									return;
 								}else{
-									updateContentToFile('quality', 'true');
+									await updateContentToFile('quality', 'true');
+									mui.fire(videoPage,'videoQuality',{quality:true});
 									return;
 								}
 								
 							}, '提醒', ['确定', '取消']);
+							return;
 
 						} else {
-							updateContentToFile('quality', 'false');
+							await updateContentToFile('quality', 'false');
+							mui.fire(videoPage,'videoQuality',{quality:false});
 							console.log("你关闭了开关");
 						}
 					});
