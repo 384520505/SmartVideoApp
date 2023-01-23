@@ -5,6 +5,7 @@ const App = new Vue({
 			app: 'smartVideo',
 			accessToken: '',
 			player: '',
+			log:null,
 
 		}
 	},
@@ -21,6 +22,9 @@ const App = new Vue({
 			} = Tools();
 
 			mui.init({});
+			
+			// 获取日志对像框
+			this.log = document.getElementById('log');
 
 			// 获取网络状态
 			const net = getNetStaus();
@@ -34,8 +38,6 @@ const App = new Vue({
 
 			// 初始化视频
 			this.player = await initVideo();
-
-			initPage('pages/setting.html', 'setting');
 
 			window.addEventListener('videoQuality', event => {
 				console.log(event.detail.quality)
@@ -68,8 +70,6 @@ const App = new Vue({
 
 	},
 	methods: {
-
-		
 		// 根据视频质量显示图标
 		setHD:async ()=>{
 			const { readFile, imgToggle, printLog } = Tools();
@@ -100,7 +100,11 @@ const App = new Vue({
 					mask: 'none'
 				});
 			}, false);
-		}
+		},
+		// 清空日志
+		clearLog() {
+			this.log.innerHTML = '';
+		},
 	},
 
 })

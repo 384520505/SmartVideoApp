@@ -54,18 +54,21 @@
 							url: 'pages/video.html',
 							styles: {
 								top: '0px', //mui标题栏默认高度为45px；
-								bottom: '0px' ,//默认为0px，可不定义；
+								bottom: '0px', //默认为0px，可不定义；
 							}
 						}],
-						beforeback:()=>{
+						beforeback: () => {
 							console.log('关闭页面')
 						}
 					});
-					
+
 
 					// 初始化setting页面
 					initPage('pages/setting.html', 'setting');
+
+					// 初始化蓝牙
 					
+
 
 					// 初始化setting文件
 					isExist('_doc/setting.json')
@@ -85,8 +88,8 @@
 
 				})
 			},
-			methods:{
-				
+			methods: {
+
 			}
 		})
 	</script>

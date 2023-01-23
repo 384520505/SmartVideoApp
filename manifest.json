@@ -2,7 +2,7 @@
     "@platforms" : [ "android", "iPhone", "iPad" ],
     "id" : "H5090E811",
     /*应用的标识，创建应用时自动生成，勿手动修改*/
-    "name" : "SmartVideoApp",
+    "name" : "智能图传",
     /*应用名称，程序桌面图标名称*/
     "version" : {
         "name" : "1.0.0",
@@ -81,14 +81,24 @@
             /*应用支持的方向，portrait-primary：竖屏正方向；portrait-secondary：竖屏反方向；landscape-primary：横屏正方向；landscape-secondary：横屏反方向*/
             "icons" : {
                 "ios" : {
-                    "iphone" : {},
-                    "ipad" : {}
+                    "iphone" : {
+                        "app@2x" : "static/logo/120px.png",
+                        "app@3x" : "static/logo/180px.png",
+                        "spotlight@2x" : "static/logo/80px.png",
+                        "spotlight@3x" : "static/logo/120px.png",
+                        "settings@2x" : "static/logo/58px.png",
+                        "settings@3x" : "static/logo/87px.png",
+                        "notification@2x" : "static/logo/40px.png",
+                        "notification@3x" : "static/logo/60px.png"
+                    },
+                    "ipad" : {},
+                    "appstore" : "static/logo/1024px.png"
                 },
                 "android" : {
-                    "hdpi" : "",
-                    "xhdpi" : "",
-                    "xxhdpi" : "",
-                    "xxxhdpi" : ""
+                    "hdpi" : "static/logo/72px.png",
+                    "xhdpi" : "static/logo/96px.png",
+                    "xxhdpi" : "static/logo/144px.png",
+                    "xxxhdpi" : "static/logo/192px.png"
                 }
             },
             "splashscreen" : {

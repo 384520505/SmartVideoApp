@@ -85,7 +85,7 @@
 				line-height: 0.222222rem;
 			}
 			.coverplate .status .log .log-device{
-				color: #ceeccd;
+				color: #6800f6;
 			}
 			.coverplate .status .log .log-error{
 				color: #f9001d;
@@ -115,13 +115,12 @@
 							<span><img id="bluetooth" src="../static/img/bluetooth-off.png" alt=""></span>
 							<span><img id="HD" src="../static/img/hd-off.png" alt=""></span>
 						</div>
-						<div id="log" class="log">
-							
-						</div>
+						<div id="log" class="log"></div>
 					</div>
 					<div class="control">
 						<ul class="icon">
 							<li @click='setting' class="setting"><img src="../static/img/setting.png" alt=""></li>
+							<li @click='clearLog' class="clearLog"><img src="../static/img/clear.png" alt=""></li>
 						</ul>
 					</div>
 				</div>

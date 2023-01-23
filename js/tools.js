@@ -48,7 +48,7 @@ function Tools() {
 				type: "div"
 			})
 		} else {
-			net = 'net is contacted';
+			net = 'net is connected';
 			mui.toast("网络状态良好！", {
 				duration: 1500,
 				type: "div"
