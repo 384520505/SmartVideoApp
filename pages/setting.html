@@ -6,11 +6,14 @@
 		<title></title>
 		<meta name="viewport"
 			content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/common.css" rel="stylesheet" />
 		<link href="../css/mui.min.css" rel="stylesheet" />
+		
 		<style>
 			#app {
 				margin-top: 45px;
 			}
+			
 		</style>
 	</head>
 
@@ -21,20 +24,24 @@
 		<div id="app">
 			<ul class="mui-table-view">
 				<li class="mui-table-view-cell">高清画质
-					<div id="quality" class="mui-switch mui-switch-mini">
+					<div id="quality" class="mui-switch mui-switch-blue mui-switch-mini">
 						<div class="mui-switch-handle"></div>
 					</div>
 				</li>
-				<li class="mui-table-view-cell">打开蓝牙
-					<div id="openBluetooth" class="mui-switch mui-switch-mini">
-						<div class="mui-switch-handle"></div>
-					</div>
+				<li @click="bluetooth" class="mui-table-view-cell">
+					<a class="mui-navigate-right">蓝牙
+					</a>
+				</li>
+				<li @click="virtualRocker" class="mui-table-view-cell">
+					<a class="mui-navigate-right">虚拟摇杆
+					</a>
 				</li>
 			</ul>
 		</div>
 	</body>
 	<script src="../js/vue.js"></script>
 	<script src="../js/mui.min.js"></script>
+	<script src="../js/BluetoothTool.js"></script>
 	<script src="../js/tools.js"></script>
 	<script type="text/javascript">
 		const App = new Vue({
@@ -43,22 +50,31 @@
 				return {
 					name: 'hello',
 					file: '',
+					
 				}
+			},
+			created(){
+				mui.plusReady(()=>{
+					
+				})
 			},
 			mounted() {
 				mui.plusReady(() => {
-					const { initSwitchStatus, updateContentToFile } = Tools();
-					
+					const {
+						initSwitchStatus,
+						updateContentToFile
+					} = Tools();
+
 					let videoPage = plus.webview.getWebviewById('video');
 
-					
+
 					mui.init({});
-					
+
 					// 初始化开关状态
 					initSwitchStatus();
 
 					// 高清画质开关
-					document.getElementById("quality").addEventListener("toggle", async (event)=>{
+					document.getElementById("quality").addEventListener("toggle", async (event) => {
 						console.log(event.detail.isActive)
 						if (event.detail.isActive) {
 							console.log("你启动了开关");
@@ -67,32 +83,32 @@
 								if (event.index) {
 									mui("#quality").switch().toggle();
 									return;
-								}else{
+								} else {
 									await updateContentToFile('quality', 'true');
-									mui.fire(videoPage,'videoQuality',{quality:true});
+									mui.fire(videoPage, 'videoQuality', {
+										quality: true
+									});
 									return;
 								}
-								
+
 							}, '提醒', ['确定', '取消']);
 							return;
 
 						} else {
 							await updateContentToFile('quality', 'false');
-							mui.fire(videoPage,'videoQuality',{quality:false});
+							mui.fire(videoPage, 'videoQuality', {
+								quality: false
+							});
 							console.log("你关闭了开关");
 						}
 					});
+
 					
-					// 蓝牙开关
-					document.getElementById('openBluetooth').addEventListener('toggle',(event)=>{
-						console.log('蓝牙开关')
-						let videoPage = plus.webview.getWebviewById('video');
-						mui.fire(videoPage,'videoQuality',{quality:true});
-					})
+					
 
 
- 
-				})  
+
+				})
 			},
 			methods: {
 				createFile() {
@@ -129,13 +145,35 @@
 					const {
 						updateContentToFile
 					} = Tools();
-					updateContentToFile('quality','true')
+					updateContentToFile('quality', 'true')
 						.then(res => {
 							console.log(res);
 						})
 						.catch(err => {
 							console.log(err);
 						})
+				},
+				bluetooth(){
+					let bluetoothPage = plus.webview.getWebviewById('bluetooth')
+					bluetoothPage.show();
+					let videoPage = plus.webview.getWebviewById('video')
+					videoPage.addEventListener('maskClick', function() {
+						bluetoothPage.hide();
+						videoPage.setStyle({
+							mask: 'none'
+						});
+					}, false);
+				},
+				virtualRocker(){
+					let virtualRockerPage = plus.webview.getWebviewById('virtualRocker')
+					virtualRockerPage.show();
+					let videoPage = plus.webview.getWebviewById('video')
+					videoPage.addEventListener('maskClick', function() {
+						virtualRockerPage.hide();
+						videoPage.setStyle({
+							mask: 'none'
+						});
+					}, false);
 				},
 			}
 		})

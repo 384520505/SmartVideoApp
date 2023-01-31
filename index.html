@@ -24,6 +24,7 @@
 	<script src="js/constant.js"></script>
 	<script src="js/vue.js"></script>
 	<script src="js/mui.min.js"></script>
+	<script src="js/BluetoothTool.js"></script>
 	<script src="js/ezuikit.js"></script>
 	<script src="js/flexible.js"></script>
 	<script src="js/tools.js"></script>
@@ -32,8 +33,13 @@
 			el: '#app',
 			data() {
 				return {
-					app: 'index'
 				}
+			},
+			created(){
+				mui.plusReady(()=>{
+					
+				})
+				
 			},
 			mounted() {
 				mui.plusReady(() => {
@@ -65,9 +71,10 @@
 
 					// 初始化setting页面
 					initPage('pages/setting.html', 'setting');
-
-					// 初始化蓝牙
-					
+					// 初始化bluetooth页面
+					initPage('pages/bluetooth.html','bluetooth');
+					// 初始化VirtualRocker页面
+					initPage('pages/VirtualRocker.html','virtualRocker');
 
 
 					// 初始化setting文件
@@ -89,7 +96,7 @@
 				})
 			},
 			methods: {
-
+				
 			}
 		})
 	</script>

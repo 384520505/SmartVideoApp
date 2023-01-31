@@ -1,0 +1,283 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport"
+			content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link rel="stylesheet" href="../css/common.css">
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<style>
+			#app {
+				margin-top: 45px;
+			}
+
+			.mui-bar a {
+				color: #bbb;
+			}
+
+			.devicename {
+				color: #bbb;
+				float: right;
+			}
+
+			.tips {
+				padding: 10px 15px 2px 15px;
+				font-size: 1rem;
+				color: #bbb;
+			}
+
+			.pairedDevices .title {
+				display: flex;
+				justify-content: space-between;
+				padding: 10px 15px 2px 15px;
+				font-size: 1rem;
+				color: #bbb;
+			}
+
+			.pairedDevices .title span:nth-child(2) {
+				width: 1.666667rem;
+				height: 1.666667rem;
+			}
+
+			.bluetoothDevice {
+				font-size: 1.166667rem;
+				display: flex;
+				justify-content: space-between;
+			}
+
+			.bluetoothDevice span:nth-child(2) {
+				width: 1.666667rem;
+				height: 1.666667rem;
+			}
+
+			.reflashAmin {
+				animation: spin 1s linear infinite;
+			}
+			.loading {
+				border: 3px solid hsla(211, 80%, 60%, 0.2);
+				border-top-color: #006fff;
+				border-radius: 50%;
+				width: 1.666667rem;
+				height: 1.666667rem;
+				animation: spin 1s linear infinite;
+			}
+			@keyframes spin {
+				to {
+					transform: rotate(360deg);
+				}
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">蓝牙</h1>
+		</header>
+		<div id="app">
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell">蓝牙
+					<div id="bluetooth" class="mui-switch mui-switch-blue mui-switch-mini">
+						<div class="mui-switch-handle"></div>
+					</div>
+				</li>
+				<button @click='sendmsg' type="button" class="mui-btn">默认</button>
+				<div class="tips">
+					使用蓝牙设备前，请在设备设置中完成蓝牙配对后，在此连接配对的蓝牙设备，进行数据传输！
+				</div>
+				<li class="mui-table-view-cell">设备名称
+					<span class="devicename">{{deviceName}}</span>
+				</li>
+				<ul v-if="bluetoothState" class="pairedDevices">
+					<div class="title">
+						<span>已配对设备</span>
+						<span id="flashIcon" @click='reflash'>
+							<img src="../static/img/shuaxin.png" alt="">
+						</span>
+					</div>
+					<li @click='selectDevice(device)' v-for=" device in pairedDevices" :value="device.address"
+						class="mui-table-view-cell bluetoothDevice">
+						<span>{{device.name?device.name:"未命名"}}</span>
+						<span v-if='selectedDevice === device.address'><img src="../static/img/gou.png" alt=""></span>
+					</li>
+
+				</ul>
+			</ul>
+
+
+
+		</div>
+	</body>
+	<script src="../js/vue.js"></script>
+	<script src="../js/mui.min.js"></script>
+	<script src="../js/BluetoothTool.js"></script>
+	<script src="../js/tools.js"></script>
+	<script type="text/javascript">
+		const App = new Vue({
+			el: '#app',
+			data() {
+				return {
+					BluetoothTool: null,
+					bluetoothState: false,
+					pairedDevices: [], //已配对的蓝牙设备
+					deviceName: '',
+					selectedDevice: null, //存储为蓝牙设备的地址字符串
+				}
+			},
+			created() {
+				mui.plusReady(() => {
+					// 初始化蓝牙
+					this.initBluetooth();
+					// 初始化蓝牙开关
+					this.initBluetoothSwitch();
+				})
+			},
+			mounted() {
+				mui.plusReady(() => {
+					let videoPage = plus.webview.getWebviewById('video');
+					const {
+						turnOnBluetooth,
+						turnOffBluetooth
+					} = this.BluetoothTool;
+					// 获取已配对的蓝牙设备
+					this.getPairedDevices();
+					// 蓝牙开关
+					document.getElementById("bluetooth").addEventListener("toggle", async (event) => {
+						console.log(event.detail.isActive)
+						if (event.detail.isActive) {
+							turnOnBluetooth();
+							this.bluetoothState = true;
+							mui.fire(videoPage, 'bluetoothState', {
+								state: true
+							});
+						} else {
+							turnOffBluetooth();
+							this.bluetoothState = false;
+							mui.fire(videoPage, 'bluetoothState', {
+								state: false
+							});
+						}
+					});
+
+				})
+
+
+			},
+			methods: {
+				sendmsg() {
+					this.BluetoothTool.sendData('01');
+				},
+				initBluetooth() {
+					let videoPage = plus.webview.getWebviewById('video');
+					const {
+						readFile
+					} = Tools();
+					this.BluetoothTool = BluetoothTool();
+					this.BluetoothTool.init({
+						// 接收到数据的回调
+						readDataCallback: (dataByteArr) => {
+							if (dataByteArr == 0) return;
+							console.log(dataByteArr)
+							mui.fire(videoPage, 'getBluData', {
+								data: dataByteArr,
+							});
+
+						},
+						// 连接中断的回调
+						connExceptionCallback: (e) => {
+							mui.fire(videoPage, 'abnormalData', {
+								message: '蓝牙连接中断！',
+							});
+							this.selectedDevice = null;
+							console.log(e)
+						}
+					});
+					const {
+						bluetoothEnable
+					} = this.BluetoothTool.state;
+					this.bluetoothState = bluetoothEnable;
+					// 获取设备厂商
+					this.deviceName = plus.device.vendor;
+					// 读取setting.json文件中的selectedDevice对象，初始化蓝牙设备选择项
+					readFile()
+						.then(res => {
+							const data = JSON.parse(res);
+							const {
+								name,
+								address
+							} = data.selectedDevice
+							// 连接设备
+							const connStatus = this.BluetoothTool.connDevice(address);
+							if (!connStatus) {
+								mui.fire(videoPage, 'abnormalData', {
+									message: '蓝牙连接失败！',
+								});
+								return;
+							}
+							mui.fire(videoPage, 'selectBlueTooth', {
+								selectedDeviceName: name
+							});
+							this.selectedDevice = address;
+						})
+						.catch(err => {
+							this.showLoading = false;
+							console.log(err)
+						})
+				},
+				initBluetoothSwitch() {
+					if (this.bluetoothState) document.getElementById('bluetooth').classList.add('mui-active');
+				},
+				getPairedDevices() {
+					this.pairedDevices = this.BluetoothTool.getPairedDevices();
+				},
+				reflash() {
+					const flashIcon = document.getElementById('flashIcon');
+					flashIcon.classList.add('reflashAmin');
+					mui.later(() => {
+						this.getPairedDevices();
+						flashIcon.classList.remove('reflashAmin');
+					}, 1000)
+
+				},
+				// 设备选择函数
+				selectDevice(device) {
+					const {
+						name,
+						address
+					} = device;
+					if (address === this.selectedDevice) return;
+					const {
+						updateContentToFile
+					} = Tools();
+					let videoPage = plus.webview.getWebviewById('video');
+					updateContentToFile('selectedDevice', {
+							name: `${name}`,
+							address: `${address}`
+						})
+						.then(res => {
+							// 连接设备
+							const connStatus = this.BluetoothTool.connDevice(address);
+							if (!connStatus) {
+								mui.fire(videoPage, 'abnormalData', {
+									message: '蓝牙连接失败！',
+								});
+								return;
+							}
+							// bluetooth页面到video页面的数据传输
+							mui.fire(videoPage, 'selectBlueTooth', {
+								selectedDeviceName: name
+							});
+							this.selectedDevice = address;
+							console.log(res);
+						})
+						.catch(err => {
+							console.log(err)
+						})
+
+				},
+			},
+		})
+	</script>
+</html>

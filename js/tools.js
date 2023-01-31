@@ -151,7 +151,6 @@ function Tools() {
 		return new Promise(async (resolve, reject) => {
 			const data = await readFile();
 			const oldcontent = JSON.parse(data);
-			console.log(oldcontent.quality);
 			// 更新内容到文件
 			oldcontent[obj] = value;
 			console.log(oldcontent[obj])
@@ -160,13 +159,12 @@ function Tools() {
 		})
 	};
 
-	// 初始化开关状态
+	// 初始化HD开关状态
 	const initSwitchStatus = () => {
 		readFile()
 			.then(res => {
 				const { quality, openBluetooth } = JSON.parse(res);
 				if (quality === 'true') document.getElementById('quality').classList.add('mui-active')
-				if (openBluetooth === 'true') mui("#openBluetooth").switch().toggle();
 			})
 			.catch(err => {
 				console.log(err)
@@ -202,7 +200,7 @@ function Tools() {
 		player = new EZUIKit.EZUIKitPlayer({
 			autoplay: true, // 默认播放
 			id: "ezvizvideo",
-			accessToken:'ra.5ad366gj0rhftupybfswuxkl05at60dc-709mw1t2bu-1hbsqpw-dxabhgcpk',
+			accessToken:'ra.88wr954j5uzbayfa92yl0kmt52vlay5c-9nz3j8sxso-0a34iia-twmj4b6nk',
 			url:'ezopen://open.ys7.com/G39444019/1.live',
 			template: "simple",
 			width,
