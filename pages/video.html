@@ -113,6 +113,12 @@
 				color: #ffffff;
 			}
 
+			.virtualControl {
+				position: fixed;
+				bottom: 0.3125rem;
+				left: 0.3125rem;
+			}
+
 			.coverplate .control {
 				height: 100%;
 			}
@@ -124,6 +130,83 @@
 			.icon li {
 				margin-bottom: 0.1875rem;
 			}
+
+			/* virtual direction buttons start */
+			.virtualBox {
+				width: 2rem;
+				height: 2rem;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				background: rgba(255, 255, 255, .5);
+				border-radius: 50%;
+
+			}
+
+			.directionBox {
+				position: relative;
+				width: 50%;
+				height: 50%;
+
+			}
+
+			.directionBox span {
+				position: absolute;
+				display: inline-block;
+				width: 100%;
+				height: 100%;
+				background: transparent;
+
+			}
+
+			.directionBox span:active svg {
+				transform: scale(1.3);
+			}
+
+			.directionBox span:active svg path {
+				fill: #1296db;
+
+			}
+
+			.directionBox span:nth-child(1) {
+				transform: rotateZ(90deg) scale(.9);
+				left: -60%;
+			}
+
+			.directionBox span:nth-child(2) {
+				transform: rotateZ(180deg) scale(.9);
+				top: -60%;
+			}
+
+			/* .directionBox span:nth-child(3) {
+			            transform: scale(.5);
+			        } */
+
+			.directionBox span:nth-child(3) {
+				transform: rotateZ(270deg) scale(.9);
+				right: -60%;
+			}
+
+			.directionBox span:nth-child(4) {
+				bottom: -60%;
+				transform: scale(.9);
+			}
+
+			.directionBox span svg {
+				width: 100%;
+				height: 100%;
+				transition: all 200ms linear;
+			}
+
+			.directionBox span svg path {
+				fill: #fff;
+				transition: all 200ms linear;
+			}
+
+			/* .directionBox span:nth-child(3) svg path {
+			            fill: #2aa515;
+			        } */
+			/* virtual direction buttons end */
 		</style>
 	</head>
 	<body>
@@ -143,7 +226,45 @@
 						<ul class="icon">
 							<li @click='setting' class="setting"><img src="../static/img/setting.png" alt=""></li>
 							<li @click='clearLog' class="clearLog"><img src="../static/img/clear.png" alt=""></li>
+							<li @click='sendData' class="sendData"><img src="../static/img/Send.png" alt=""></li>
+							<!-- <li @click='queryBattery' class="queryBattery"><img src="../static/img/dianchidianliang.png" alt=""></li> -->
 						</ul>
+					</div>
+				</div>
+			</div>
+			<div v-if='virtualButton' class="virtualControl">
+				<div class='virtualBox'>
+					<div class='directionBox'>
+						<span @click='virControl(0)'><svg t="1675237714556" class="icon" viewBox="0 0 1024 1024" version="1.1"
+								xmlns="http://www.w3.org/2000/svg" p-id="40625">
+								<path
+									d="M874.666667 342.4L553.322667 665.450667c-11.434667 11.498667-25.024 17.237333-40.789334 17.237333-15.765333 0-29.354667-5.76-40.789333-17.237333L149.333333 341.333333c101.866667 84.032 227.456 133.632 363.306667 133.632 135.296 0 260.394667-49.173333 362.026667-132.544z"
+									p-id="40626"></path>
+							</svg></span>
+						<span @click='virControl(1)'><svg t="1675237714556" class="icon" viewBox="0 0 1024 1024" version="1.1"
+								xmlns="http://www.w3.org/2000/svg" p-id="40625">
+								<path
+									d="M874.666667 342.4L553.322667 665.450667c-11.434667 11.498667-25.024 17.237333-40.789334 17.237333-15.765333 0-29.354667-5.76-40.789333-17.237333L149.333333 341.333333c101.866667 84.032 227.456 133.632 363.306667 133.632 135.296 0 260.394667-49.173333 362.026667-132.544z"
+									p-id="40626"></path>
+							</svg></span>
+						<!-- <span><svg t="1675242201934" class="icon" viewBox="0 0 1024 1024" version="1.1"
+				                    xmlns="http://www.w3.org/2000/svg" p-id="50674">
+				                    <path
+				                        d="M916.115386 467.228307 557.971519 467.228307 557.971519 109.085464c0-24.714891-20.056801-44.771693-44.770669-44.771693-24.715915 0-44.772716 20.056801-44.772716 44.771693l0 358.142843L110.285291 467.228307c-24.715915 0-44.771693 20.056801-44.771693 44.771693s20.056801 44.772716 44.771693 44.772716l358.142843 0 0 358.143866c0 24.761963 20.056801 44.770669 44.772716 44.770669 24.713868 0 44.770669-20.008706 44.770669-44.770669L557.971519 556.772716l358.143866 0c24.762987 0 44.771693-20.057825 44.771693-44.772716S940.878372 467.228307 916.115386 467.228307L916.115386 467.228307zM916.115386 467.228307"
+				                        p-id="50675"></path>
+				                </svg></span> -->
+						<span @click='virControl(2)'><svg t="1675237714556" class="icon" viewBox="0 0 1024 1024" version="1.1"
+								xmlns="http://www.w3.org/2000/svg" p-id="40625">
+								<path
+									d="M874.666667 342.4L553.322667 665.450667c-11.434667 11.498667-25.024 17.237333-40.789334 17.237333-15.765333 0-29.354667-5.76-40.789333-17.237333L149.333333 341.333333c101.866667 84.032 227.456 133.632 363.306667 133.632 135.296 0 260.394667-49.173333 362.026667-132.544z"
+									p-id="40626"></path>
+							</svg></span>
+						<span @click='virControl(3)'><svg t="1675237714556" class="icon" viewBox="0 0 1024 1024" version="1.1"
+								xmlns="http://www.w3.org/2000/svg" p-id="40625">
+								<path
+									d="M874.666667 342.4L553.322667 665.450667c-11.434667 11.498667-25.024 17.237333-40.789334 17.237333-15.765333 0-29.354667-5.76-40.789333-17.237333L149.333333 341.333333c101.866667 84.032 227.456 133.632 363.306667 133.632 135.296 0 260.394667-49.173333 362.026667-132.544z"
+									p-id="40626"></path>
+							</svg></span>
 					</div>
 				</div>
 			</div>
@@ -155,8 +276,13 @@
 	<script src="../js/loading.js"></script>
 	<script src="../js/ezuikit.js"></script>
 	<script src="../js/flexible.js"></script>
+	<script src="../js/encoding-indexes.js"></script>
+	<script src="../js/encoding.js"></script>
+	<script src="../js/polyfill.js"></script>
+	<script src="../js/jssdk-1.4.3.min.js"></script>
 	<script src="../js/ajax.js"></script>
 	<script src="../js/tools.js"></script>
+	<script src="../js/usrCloud-tools.js"></script>
 	<script src="../js/BluetoothTool.js"></script>
 	<script>
 		const App = new Vue({
@@ -168,14 +294,17 @@
 					log: null,
 					BluetoothTool: null,
 					bluetoothState: false,
+					virtualButton: false,
+					speed:1,
 
 				}
 			},
 			created() {
-				mui.plusReady(() => {
+				mui.plusReady(async () => {
 					const {
 						imgToggle,
-						printLog
+						printLog,
+						readFileOnData
 					} = Tools();
 
 					// 获取蓝牙状态
@@ -192,6 +321,13 @@
 							text: 'bluetooth is closed'
 						})
 					}
+					
+					// 获取camera对象
+					const camera = await readFileOnData('camera');
+					const { virtualButton, speed } = camera;
+					if(virtualButton) this.virtualButton = virtualButton;
+					this.speed = speed;
+					
 				});
 			},
 			mounted() {
@@ -223,7 +359,11 @@
 
 					// 初始化视频
 					this.player = await initVideo();
+					
+					// 初始化 USR SDK
+					this.initSDK();
 
+					// 监听视频画质切换
 					window.addEventListener('videoQuality', event => {
 						console.log(event.detail.quality)
 						if (event.detail.quality) {
@@ -302,6 +442,18 @@
 						printLog({
 							text: data
 						});
+					});
+					
+					// 监听虚拟按键的显示
+					window.addEventListener('isShowVirButton', event=>{
+						const { virtualButton } = event.detail;
+						this.virtualButton = virtualButton;
+					});
+					
+					// 监听相机移动速度值
+					window.addEventListener('speedValue', event=>{
+						const { speed } = event.detail;
+						this.speed = speed;
 					})
 
 				})
@@ -311,6 +463,37 @@
 
 			},
 			methods: {
+				// 初始化USR SDK,并监听设备发送的数据
+				initSDK: async ()=>{
+					const { printLog } = Tools();
+					const { initUsrSDK, listenDataOfDevice, listenBattery, listenNetStatus } = UsrCloud_Tools();
+					const res = await initUsrSDK(UsrAppkey, UsrAppSecret);
+					if(!res.code){
+						printLog({text:'init SDK failed'});
+						return;
+					}
+					printLog({text:'init SDK success'});
+					// 监听设备透传数据
+					listenDataOfDevice([T1DeviceNo], (res)=>{
+						const { code, data } = res;
+						if(!code){
+							printLog({text:'listen data failed'});
+							return;
+						}
+						printLog({text:data});
+					});
+					// 监听设备电量
+					listenBattery([T1DeviceNo], (res)=>{
+						const { data } = res;
+						// 未完成
+						
+					});
+					// 监听网络状态
+					listenNetStatus([T1DeviceNo], (res)=>{
+						// 未完成
+					})
+				},
+				
 				// 根据视频质量显示图标
 				setHD: async () => {
 					const {
@@ -327,9 +510,9 @@
 						})
 						.catch(err => {
 							console.log(err)
-							return 'false'; //视频画质默认为标清
+							return false; //视频画质默认为标清
 						})
-					if (quality === 'true') {
+					if (quality) {
 						imgToggle('HD', '../static/img/hd-on.png');
 						printLog({
 							text: 'HD显示！'
@@ -354,19 +537,59 @@
 				// 清空日志
 				clearLog() {
 					this.log.innerHTML = '';
+					const { printLog } = Tools();
+					printLog({ level:'device', text:'$智能图传$' });
+				},
+				
+				// 发送数据到设备上
+				sendData(){
+					const { sendDataToDevice } = UsrCloud_Tools();
+					const { printLog } = Tools();
+					printLog({ text:'send message' });
+					sendDataToDevice(T1DeviceNo, '{ direction:up, time:now }');
+				},
+				
+				//查询电池电量
+				queryBattery(){
+					const { quertDeviceBattery } = UsrCloud_Tools();
+					const { printLog } = Tools();
+					printLog({ text:'query device battery' });
+					quertDeviceBattery(T1DeviceNo);
+					
+					// const { quertNetStatus } = UsrCloud_Tools();
+					// const { printLog } = Tools();
+					// printLog({ text:'query net status' });
+					// quertNetStatus(T1DeviceNo);
 				},
 
 				// 获取蓝牙状态
 				getBluetoothState() {
-					const {
-						printLog
-					} = Tools();
 					this.BluetoothTool = BluetoothTool();
 					const {
 						getBluetoothStatus
 					} = this.BluetoothTool;
 					const state = getBluetoothStatus();
 					if (state !== this.bluetoothState) this.bluetoothState = state;
+				},
+				
+				// 相机虚拟控制
+				/**
+				 * direction: 控制方向
+				 * 0:左，
+				 * 1:上，
+				 * 2:右，
+				 * 3:下
+				 * */
+				virControl(direction){
+					const { stopContral, startContral } = AjaxObj();
+					console.log(this.speed)
+					startContral(direction, this.speed)
+					.then(res=>{
+						stopContral(direction);
+					})
+					.catch(error=>{
+						console.log('云台控制失败！', error);
+					})
 				},
 			},
 

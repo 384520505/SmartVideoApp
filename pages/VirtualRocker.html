@@ -13,186 +13,27 @@
 			body {
 			  width: 100%;
 			  height: 100%;
-			  display: flex;
-			  align-items: center;
-			  justify-content: center;
 			}
 			
 			#app {
-				margin-top: 45px;
+				padding-top: 45px;
 			}
 			
 			.mui-bar a {
 				color: #bbb;
 			}
-			/* button layout */
-			.directional-buttons {
-			  /* Define the size of the grid */
-			  /* Other things rely on this! Change at your own peril! */
-			  width: 16rem;
-			  height: 16rem;
-			  /* display the buttons in a grid */
-			  display: grid;
-			  /* leave a little gap between columns/rows */
-			  grid-gap: 0.5rem;
-			  /* define a 3 x 3 grid with middle column/row larger */
-			  grid-template-columns: 45fr 60fr 45fr;
-			  grid-template-rows: 45fr 60fr 45fr;
-			  /* name the cells in the grid */
-			  grid-template-areas: "....  up  ....."
-			                       "left  ..  right"
-			                       ".... down .....";    
+			.mui-input-range{
+				padding-right: 0 !important;
 			}
-			
-			/* hides the button text */
-			.visually-hidden {
-			  position: absolute !important;
-			  height: 1px; 
-			  width: 1px;
-			  overflow: hidden;
-			  clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
-			  clip: rect(1px, 1px, 1px, 1px);
-			  white-space: nowrap;
+			.mui-tooltip{
+				font-size: 24px !important;
+				width: 32px !important;
+				height: 32px !important;
+				line-height: 32px !important;
+				top: -2.5rem !important;
 			}
-			
-			/* base button */
-			.direction-button {
-			  /* the button colours */
-			  color: rgb(55, 50, 50);
-			  /* since there's no text, we can use the color value for the background */
-			  background: currentcolor;
-			  /* clears default button styles */
-			  border: none;
-			  /* makes sure the triangles are moved relative to the button */
-			  position: relative;
-			}
-			
-			/* the overlapping outside triangle 
-			 * actually, it's just a rotated square
-			 */
-			.direction-button:before {
-			  /* make the triangle display */
-			  display: block;
-			  content: "";
-			  /* make the triangle able to be moved around relative to the button */
-			  position: absolute;
-			  /* approximately makes the diagonal the right size */
-			  width: 4.25rem;
-			  height: 4.25rem;
-			  /* rotate the square (to look like a triangle) */
-			  transform: rotate(45deg);
-			  /* use the current color value for the background to match the button */
-			  background: currentcolor;
-			}
-			
-			/* the inner direction triangle */
-			.direction-button:after {
-			  /* make the triangle display */
-			  display: block;
-			  content: "";
-			  /* make the triangle able to be moved around relative to the button */
-			  position: absolute;
-			  /* same border-based triangle trick as before */
-			  border: 2rem solid transparent;
-			  /* using color value for border-color to make it easier to change */
-			  color: rgba(255, 250, 250, 0.6);
-			}
-			
-			/* when the button is hovered */
-			.direction-button:hover {
-			  /* make the button a different color */
-			  color: rgb(85,55,55);
-			}
-			
-			/* when the button is pressed */
-			.direction-button:active:after {
-			  /* make the inner triangle a different color! */
-			  color: rgb(255, 152, 152);
-			}
-			
-			/* individual button styles */
-			.up {
-			  /* puts the button in the named grid cell */
-			  grid-area: up;
-			  /* only curves the outer corners */
-			  border-radius: 0.5rem 0.5rem 0 0;
-			}
-			.up:before {
-			  /* center the overlapping triangle horizontally */
-			  left: calc(50% - 2.125rem);
-			  /* position it so it overlaps just right */
-			  bottom: -2.125rem;
-			}
-			.up:after {
-			  /* do the border-based triangle trick */
-			  border-bottom-color: currentcolor;
-			  /* center inner triangle horizontally */
-			  left: calc(50% - 2rem);
-			  /* position it just right */
-			  top: -1rem;
-			}
-			
-			.left {
-			  /* puts the button in the named grid cell */
-			  grid-area: left;
-			  /* only curves the outer corners */
-			  border-radius: 0.5rem 0 0 0.5rem;
-			}
-			.left:before {
-			  /* position it so it overlaps just right */
-			  right: -2.125rem;
-			  /* center the overlapping triangle vertically */
-			  top: calc(50% - 2.125rem);
-			}
-			.left:after {
-			  /* do the border-based triangle trick */
-			  border-right-color: currentcolor;
-			  /* center inner triangle vertically */
-			  top: calc(50% - 2rem);
-			  /* position it just right */
-			  left: -1rem;
-			}
-			
-			.right {
-			  /* puts the button in the named grid cell */
-			  grid-area: right;
-			  /* only curves the outer corners */
-			  border-radius: 0 0.5rem 0.5rem 0;
-			}
-			.right:before {
-			  /* position it so it overlaps just right */
-			  left: -2.125rem;
-			  /* center the overlapping triangle vertically */
-			  top: calc(50% - 2.125rem);
-			}
-			.right:after {
-			  /* do the border-based triangle trick */
-			  border-left-color: currentcolor;
-			  /* center inner triangle vertically */
-			  top: calc(50% - 2rem);
-			  /* position it just right */
-			  right: -1rem;
-			}
-			
-			.down {
-			  /* puts the button in the named grid cell */
-			  grid-area: down;
-			  /* only curves the outer corners */
-			  border-radius: 0 0 0.5rem 0.5rem;
-			}
-			.down:before {
-			  /* center the overlapping triangle horizontally */
-			  left: calc(50% - 2.125rem);
-			  /* position it so it overlaps just right */
-			  top: -2.125rem;
-			}
-			.down:after {
-			  /* do the border-based triangle trick */
-			  border-top-color: currentcolor;
-			  /* center inner triangle horizontally */
-			  left: calc(50% - 2rem);
-			  /* position it just right */
-			  bottom: -1rem;
+			.camera{
+				color: #bbb;
 			}
 		</style>
 	</head>
@@ -200,54 +41,137 @@
 	<body>
 		<header class="mui-bar mui-bar-nav">
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-			<h1 class="mui-title">虚拟摇杆</h1>
+			<h1 class="mui-title">云台控制</h1>
 		</header>
 		<div id="app">
-			<div class="contral">
-				<div class="directional-buttons">
-				  <button @click='contral(0)' class="direction-button up">
-				    <span class="visually-hidden">up</span>
-				  </button>
-				  <button @click='contral(2)' class="direction-button left">
-				    <span class="visually-hidden">left</span>
-				  </button>
-				  <button @click='contral(3)' class="direction-button right">
-				    <span class="visually-hidden">right</span>
-				  </button>
-				  <button @click='contral(1)' class="direction-button down">
-				    <span class="visually-hidden">down</span>
-				  </button>
-				</div>
-			</div>
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell">蓝牙同步
+					<div id="asyncBlu" class="mui-switch mui-switch-blue mui-switch-mini">
+						<div class="mui-switch-handle"></div>
+					</div>
+				</li>
+				<li class="mui-table-view-cell">虚拟按键
+					<div id="virtualButton" class="mui-switch mui-switch-blue mui-switch-mini">
+						<div class="mui-switch-handle"></div>
+					</div>
+				</li>
+				<li class="mui-table-view-cell">
+					<label class="camera" for="">相机移速</label>
+					<div class="mui-input-row mui-input-range">
+						<input @input='adjustSpeed' type="range" min="0" max="2" :value="speed">
+					</div>
+				</li>
+			</ul>
 		</div>
 	</body>
 	<script src="../js/vue.js"></script>
 	<script src="../js/mui.min.js"></script>
 	<script src="../js/constant.js"></script>
+	<script src="../js/tools.js"></script>
 	<script src="../js/ajax.js"></script>
 	<script type="text/javascript">
 		const App = new Vue({
 			el:'#app',
 			data(){
 				return {
+					asyncBlu: true,
+					virtualButton:false,
 					speed:1,
+					isChange: false,
+					
 				};
 			},
 			created(){
-				
+				mui.plusReady(()=>{
+					// 初始化参数
+					this.initSwitch();
+				})
 			},
 			mounted(){
 				mui.plusReady(()=>{
-					mui.init();
+					const { updateContentToFile } = Tools();
+					let videoPage = plus.webview.getWebviewById('video');
+					mui.init({
+						beforeback: () => {
+							console.log('关闭页面')
+							if(!this.isChange) return;
+							updateContentToFile('camera',{"virtualButton":this.virtualButton, "speed":this.speed})
+							.then(res=>{
+								console.log(res)
+							})
+							.catch(error=>{
+								console.log('camera对象更新到文件失败！', error);
+							})
+						}
+					});
+					
+					document.getElementById("asyncBlu").addEventListener("toggle", async (event) => {
+						this.isChange = true;
+						if (event.detail.isActive) {
+							this.asyncBlu = true;
+							// mui.fire(videoPage, 'isShowVirButton', {
+							// 	virtualButton: true
+							// });
+						} else {
+							this.asyncBlu = false;
+							// mui.fire(videoPage, 'isShowVirButton', {
+							// 	virtualButton: false
+							// });
+						}
+					});
+					
+					document.getElementById("virtualButton").addEventListener("toggle", async (event) => {
+						this.isChange = true;
+						if (event.detail.isActive) {
+							this.virtualButton = true;
+							mui.fire(videoPage, 'isShowVirButton', {
+								virtualButton: true
+							});
+						} else {
+							this.virtualButton = false;
+							mui.fire(videoPage, 'isShowVirButton', {
+								virtualButton: false
+							});
+						}
+					});
 					
 				})
 			},
 			methods:{
-				contral: async (direction)=>{
-					const { stopContral, startContral } = AjaxObj();
-					console.log(this.speed)
-					const res2 = await startContral(direction, 0);
-					const res1 = await stopContral(direction);
+				
+				// 初始化云台控制(蓝牙同步、虚拟按钮、相机移速)
+				initSwitch(){
+					const { readFileOnData } = Tools();
+					readFileOnData('camera')
+					.then(res=>{
+						const { asyncBlu, virtualButton, speed } = res; 
+						if(virtualButton) {
+							this.virtualButton = virtualButton;
+							document.getElementById('virtualButton').classList.add('mui-active');
+						}
+						if(asyncBlu){
+							document.getElementById('asyncBlu').classList.add('mui-active');
+						}
+						this.asyncBlu = asyncBlu;
+						this.speed = speed;
+					})
+					.catch(error=>{
+						console.log('初始化云台控制失败！',error);
+					})
+				},
+				
+				// 调整相机的移动速度
+				adjustSpeed(event){
+					const { updateContentToFile } = Tools();
+					const { value } = event.target;
+					if(this.speed === value) return;
+					let videoPage = plus.webview.getWebviewById('video');
+					mui.fire(videoPage, 'speedValue', {
+						speed: value
+					});
+					this.isChange = true;
+					this.speed = value;
+					
 				},
 			}
 		})

@@ -33,7 +33,7 @@
 					</a>
 				</li>
 				<li @click="virtualRocker" class="mui-table-view-cell">
-					<a class="mui-navigate-right">虚拟摇杆
+					<a class="mui-navigate-right">云台控制
 					</a>
 				</li>
 			</ul>
@@ -84,7 +84,7 @@
 									mui("#quality").switch().toggle();
 									return;
 								} else {
-									await updateContentToFile('quality', 'true');
+									await updateContentToFile('quality', true);
 									mui.fire(videoPage, 'videoQuality', {
 										quality: true
 									});
@@ -95,7 +95,7 @@
 							return;
 
 						} else {
-							await updateContentToFile('quality', 'false');
+							await updateContentToFile('quality', false);
 							mui.fire(videoPage, 'videoQuality', {
 								quality: false
 							});
@@ -145,7 +145,7 @@
 					const {
 						updateContentToFile
 					} = Tools();
-					updateContentToFile('quality', 'true')
+					updateContentToFile('quality', true)
 						.then(res => {
 							console.log(res);
 						})

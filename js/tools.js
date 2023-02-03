@@ -145,6 +145,21 @@ function Tools() {
 			})
 		})
 	};
+	
+	// 读取文件中指定的数据
+	const readFileOnData = (key)=>{
+		return new Promise((resolve, reject)=>{
+			readFile()
+			.then(res=>{
+				const data = JSON.parse(res);
+				resolve(data[key]);
+			})
+			.catch(err=>{
+				reject('获取指定数据失败!')
+			})
+		})
+		
+	};
 
 	// 更新内容内容到文件中
 	const updateContentToFile = (obj, value) => {
@@ -163,8 +178,8 @@ function Tools() {
 	const initSwitchStatus = () => {
 		readFile()
 			.then(res => {
-				const { quality, openBluetooth } = JSON.parse(res);
-				if (quality === 'true') document.getElementById('quality').classList.add('mui-active')
+				const { quality } = JSON.parse(res);
+				if (quality) document.getElementById('quality').classList.add('mui-active')
 			})
 			.catch(err => {
 				console.log(err)
@@ -191,10 +206,10 @@ function Tools() {
 			})
 			.catch(err => {
 				console.log(err)
-				return 'false'; //视频画质默认为标清
+				return false; //视频画质默认为标清
 			})
 		console.log(quality);
-		if (quality === 'true'){
+		if (quality){
 			url = VideoUrlHD;
 		}
 		player = new EZUIKit.EZUIKitPlayer({
@@ -221,6 +236,7 @@ function Tools() {
 		isExist,
 		writeFile,
 		readFile,
+		readFileOnData,
 		updateContentToFile,
 		initSwitchStatus,
 		initVideo,
