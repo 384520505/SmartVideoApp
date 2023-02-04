@@ -1,4 +1,4 @@
-# SmartVideoApp
+# 视频监控软件 video monitoring app
 -[](https://blog.csdn.net/bosaidongmomo/article/details/128092710)
 
 # study to commit a project on github for MacOS
