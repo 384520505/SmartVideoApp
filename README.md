@@ -34,3 +34,36 @@
 - 1.software:Hbuilder
 - 2.git clone this project
 - 3.
+
+
+document.addEventListener("deviceready", onDeviceReady, false);
+
+function onDeviceReady() {
+  window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFS, fail);
+}
+
+function gotFS(fileSystem) {
+  fileSystem.root.getFile("readme.txt", {create: true, exclusive: false}, gotFileEntry, fail);
+}
+
+function gotFileEntry(fileEntry) {
+  fileEntry.createWriter(gotFileWriter, fail);
+}
+
+function gotFileWriter(writer) {
+  writer.onwriteend = function(evt) {
+    console.log("write success");
+    writer.seek(0);
+    writer.write("This is some new text.");
+  };
+  writer.write("This is some text.");
+}
+
+function fail(error) {
+  console.log(error.code);
+}
+该示例使用 deviceready 事件监听器确保 H5+ API 可以使用，再访问文件系统。然后使用 window.requestFileSystem 函数请求访问持久性文件系统，使用 fileSystem.root.getFile 函数获取名为 "readme.txt" 的文件的文件句柄。
+
+一旦获得了文件句柄，可以使用 fileEntry.createWriter 函数获取一个 FileWriter 对象，可以用它写入文件。在这个例子中，使用 writer.write 函数将字符串 "This is some text." 写入文件。然后使用 writer.onwriteend 函数记录一条表示写入成功的消息，并写入一些新文本。
+
+你可以使用类似的代码实现读取文件。可以使用 fileEntry.file 函数获取一个 File 对象，该对象可以传递给 FileReader 对象的 readAsText 方法来读取文件的内容。
