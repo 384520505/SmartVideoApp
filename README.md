@@ -67,3 +67,15 @@ function fail(error) {
 一旦获得了文件句柄，可以使用 fileEntry.createWriter 函数获取一个 FileWriter 对象，可以用它写入文件。在这个例子中，使用 writer.write 函数将字符串 "This is some text." 写入文件。然后使用 writer.onwriteend 函数记录一条表示写入成功的消息，并写入一些新文本。
 
 你可以使用类似的代码实现读取文件。可以使用 fileEntry.file 函数获取一个 File 对象，该对象可以传递给 FileReader 对象的 readAsText 方法来读取文件的内容。
+
+
+查看netcat服务器接收到数据
+nc -l -p <port> -k | tee filename.txt
+netcat服务器在端口14999启动管道模式，可以实现两个客服端数据互传
+nc -l -p 14999
+查看客户端连接情况以及监听的端口
+netstat -an | grep "ESTABLISHED\|LISTEN"
+netcat 启动两个监听端口，实现数据转发
+ncat -l -p 14999 --keep-open -c 'nc -l -k 15000'
+启动该服务保持在后台运行，即使关闭终端，任然运行
+nohup node socket.js &

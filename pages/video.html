@@ -280,6 +280,7 @@
 	<script src="../js/encoding.js"></script>
 	<script src="../js/polyfill.js"></script>
 	<script src="../js/jssdk-1.4.3.min.js"></script>
+	<script src="../js/socket.io.js"></script>
 	<script src="../js/ajax.js"></script>
 	<script src="../js/tools.js"></script>
 	<script src="../js/usrCloud-tools.js"></script>
@@ -296,6 +297,7 @@
 					bluetoothState: false,
 					virtualButton: false,
 					speed:1,
+					ws:null,
 
 				}
 			},
@@ -362,6 +364,21 @@
 					
 					// 初始化 USR SDK
 					this.initSDK();
+					
+					// 连接阿里云的websocket服务器
+					this.ws = new WebSocket(`ws://${AliyWebSocketServerIP}:${AliyWebSocketServerPORT}`);
+					// 监听连接状态
+					this.ws.onopen = ()=>{
+						printLog({
+							text: 'Connected to WebSocket server!'
+						});
+					}
+					// 监听获取的数据
+					this.ws.onmessage = (event) => {
+					    printLog({
+					    	text: event.data,
+					    });
+					};
 
 					// 监听视频画质切换
 					window.addEventListener('videoQuality', event => {
@@ -543,10 +560,10 @@
 				
 				// 发送数据到设备上
 				sendData(){
-					const { sendDataToDevice } = UsrCloud_Tools();
+					// const { sendDataToDevice } = UsrCloud_Tools();
 					const { printLog } = Tools();
 					printLog({ text:'send message' });
-					sendDataToDevice(T1DeviceNo, '{ direction:up, time:now }');
+					this.ws.send('app hello world');
 				},
 				
 				//查询电池电量

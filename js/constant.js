@@ -10,3 +10,5 @@ const T1DeviceNo = '00002000140384000001'; //T1的设备编号
 const stopContralUrl = 'https://open.ys7.com/api/lapp/device/ptz/stop';
 const startContralUrl = 'https://open.ys7.com/api/lapp/device/ptz/start';
 const initSettingFile = '{"quality":false,"openBluetooth":false,"selectedDevice":{"name":"null","address":"null"},"camera":{"asyncBlu":true,"virtualButton":false,"speed":"1"}}';
+const AliyWebSocketServerIP = '118.190.157.135';
+const AliyWebSocketServerPORT = '14998';

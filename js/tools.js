@@ -215,7 +215,7 @@ function Tools() {
 		player = new EZUIKit.EZUIKitPlayer({
 			autoplay: true, // 默认播放
 			id: "ezvizvideo",
-			accessToken:'ra.d6hje2wj07r4payu2s2129h120duzvj4-8dw6om0wcg-0hmo4gs-mhitkjcgr',
+			accessToken:'ra.37dww3eb9d9aigue9ctqkuid98txv49s-5q6qu5vby0-1wl02lu-ulvmnopb4',
 			url:'ezopen://open.ys7.com/G39444019/1.live',
 			template: "simple",
 			width,
