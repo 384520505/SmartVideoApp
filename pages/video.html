@@ -62,27 +62,40 @@
 				width: 100%;
 				height: 100%;
 				color: white;
-				padding: 0.3125rem;
+				/* padding: 0.3125rem; */
 				display: flex;
 				justify-content: space-between;
 			}
 
 			.coverplate .status {
-				width: 2.407407rem;
+				/* width: 2.407407rem; */
+				width: 100%;
 			}
 
 			.coverplate .status .devices {
-				border-radius: 0.092593rem;
+				/* border-radius: 0.092593rem; */
 				background: rgba(255, 255, 255, 0.5);
+				display: flex;
+				justify-content: space-between;
+			}
+			.devices .devices-left{
+				padding: 0.148148rem;
+				display: flex;
+				justify-content: space-between;
+			}
+			.devices .devices-right{
 				padding: 0.148148rem;
 				display: flex;
 				justify-content: space-between;
 			}
 
-			.devices span {
+			.devices span{
 				width: 0.375rem;
 				height: 0.375rem;
-
+				margin: 0 0.25rem;
+			}
+			.devices .devices-right{
+				border-left: 1px solid #c1c0c2;
 			}
 
 			.coverplate .status .log {
@@ -119,13 +132,34 @@
 				left: 0.3125rem;
 			}
 
-			.coverplate .control {
-				height: 100%;
+			.coverplate .normMessage {
+				display: flex;
+				justify-content: space-between;
 			}
-
-			.control .icon {
+			.normMessage-left, .normMessage-right{
+				width: 2.5rem;
+			}
+			.normMessage .icon {
 				width: 0.375rem;
 			}
+			.normMessage li{
+				display: flex;
+				justify-content: space-between;
+				text-align: center;
+				height: 0.666667rem;
+				margin-top: 0.083333rem;
+				background-color: rgba(255, 255, 255, 0.5);
+				padding: 0 0.166667rem;
+			}
+			.normMessage li span{
+				height: 100%;
+				line-height: 0.666667rem;
+			}
+			.normMessage li img{
+				width: 0.666667rem;
+				
+			}
+			
 
 			.icon li {
 				margin-bottom: 0.1875rem;
@@ -197,11 +231,21 @@
 				height: 100%;
 				transition: all 200ms linear;
 			}
+			svg {
+				width: 100%;
+				height: 100%;
+				transition: all 200ms linear;
+			}
 
 			.directionBox span svg path {
 				fill: #fff;
 				transition: all 200ms linear;
 			}
+			svg path {
+				fill: #fff;
+				transition: all 200ms linear;
+			}
+			
 
 			/* .directionBox span:nth-child(3) svg path {
 			            fill: #2aa515;
@@ -216,22 +260,62 @@
 				<div class="coverplate">
 					<div class="status">
 						<div class="devices">
-							<span><img id="net" src="../static/img/wifi-on.png" alt=""></span>
-							<span><img id="bluetooth" src="../static/img/bluetooth-off.png" alt=""></span>
-							<span><img id="HD" src="../static/img/hd-off.png" alt=""></span>
+							<div class="devices-left">
+								<span><img id="net" src="../static/img/wifi-on.png" alt=""></span>
+								<span><img id="bluetooth" src="../static/img/bluetooth-off.png" alt=""></span>
+								<span><img id="HD" src="../static/img/hd-off.png" alt=""></span>
+							</div>
+							<div class="devices-right">
+								<span @click='setting' ><img id="menu" src="../static/img/caidan.png" alt=""></span>
+							</div>
 						</div>
-						<div id="log" class="log"></div>
+						<!-- <div id="log" class="log"></div> -->
+						<div class="normMessage">
+							<div class="normMessage-left">
+								<ul>
+									<li>
+										<span>蓝牙设备：{{selectedDevice}}</span>
+									</li>
+									<li>
+										<span>屏幕：{{ScreenMode}}</span>
+									</li>
+									<li>
+										<span>地图：{{MapMode}}</span>
+									</li>
+								</ul>
+							</div>
+							<div class="normMessage-right">
+								<ul>
+									<li>
+										<span>粉量：{{PowerNum}}/度</span>
+									</li>
+									<li>
+										<span>车速：{{VehiceSpeed}}m/s</span>
+									</li>
+									<li>
+										<span>定位状态：{{LocalStatus}}</span>
+									</li>
+									<li>
+										<span>地图状态：{{MapStatus}}</span>
+									</li>
+								</ul>
+							</div>
+						</div>
 					</div>
-					<div class="control">
+					<!-- version 2.0.1 -->
+					<!-- <div class="control">
 						<ul class="icon">
 							<li @click='setting' class="setting"><img src="../static/img/setting.png" alt=""></li>
 							<li @click='clearLog' class="clearLog"><img src="../static/img/clear.png" alt=""></li>
 							<li @click='sendData' class="sendData"><img src="../static/img/send.png" alt=""></li>
-							<!-- <li @click='queryBattery' class="queryBattery"><img src="../static/img/dianchidianliang.png" alt=""></li> -->
+							<li @click='queryBattery' class="queryBattery"><img src="../static/img/dianchidianliang.png" alt=""></li>
 						</ul>
-					</div>
+					</div> -->
+					<!-- version 2.0.1 -->
+					
 				</div>
 			</div>
+			<!-- 摄像头控制虚拟按钮 -->
 			<div v-if='virtualButton' class="virtualControl">
 				<div class='virtualBox'>
 					<div class='directionBox'>
@@ -298,7 +382,13 @@
 					virtualButton: false,
 					speed:1,
 					ws:null,
-
+					ScreenMode:'',
+					MapMode:'',
+					PowerNum: 0,
+					VehiceSpeed: 0,
+					LocalStatus:'',
+					MapStatus:'',
+					selectedDevice:''
 				}
 			},
 			created() {
@@ -306,21 +396,30 @@
 					const {
 						imgToggle,
 						printLog,
-						readFileOnData
+						readFileOnData,
+						readFile
 					} = Tools();
 
 					// 获取蓝牙状态
 					this.getBluetoothState();
 					if (this.bluetoothState) {
 						imgToggle('bluetooth', '../static/img/bluetooth-on.png');
-						printLog({
-							level: 'device',
-							text: 'bluetooth is opened'
+						// printLog({
+						// 	level: 'device',
+						// 	text: 'bluetooth is opened'
+						// });
+						mui.toast("bluetooth is opened！", {
+							duration: 1500,
+							type: "div"
 						})
 					} else {
-						printLog({
-							level: 'device',
-							text: 'bluetooth is closed'
+						// printLog({
+						// 	level: 'device',
+						// 	text: 'bluetooth is closed'
+						// });
+						mui.toast("bluetooth is closed！", {
+							duration: 1500,
+							type: "div"
 						})
 					}
 					
@@ -329,6 +428,25 @@
 					const { virtualButton, speed } = camera;
 					if(virtualButton) this.virtualButton = virtualButton;
 					this.speed = speed;
+					
+					// 获取相关参数
+					const paramStr = await readFile();
+					const { 
+						ScreenMode,
+						MapMode,
+						PowerNum,
+						VehiceSpeed,
+						LocalStatus,
+						MapStatus,
+						selectedDevice:{name}
+					} = JSON.parse(paramStr);
+					this.ScreenMode = ScreenMode;
+					this.MapMode = MapMode;
+					this.PowerNum = PowerNum;
+					this.VehiceSpeed = VehiceSpeed;
+					this.LocalStatus = LocalStatus;
+					this.MapStatus = MapStatus;
+					this.selectedDevice = name;
 					
 				});
 			},
@@ -360,39 +478,47 @@
 
 
 					// 初始化视频
-					this.player = await initVideo();
+					// this.player = await initVideo();
 					
 					// 初始化 USR SDK
 					this.initSDK();
 					
 					// 连接阿里云的websocket服务器
-					this.ws = new WebSocket(`ws://${AliyWebSocketServerIP}:${AliyWebSocketServerPORT}`);
+					// this.ws = new WebSocket(`ws://${AliyWebSocketServerIP}:${AliyWebSocketServerPORT}`);
 					// 监听连接状态
-					this.ws.onopen = ()=>{
-						printLog({
-							text: 'Connected to WebSocket server!'
-						});
-					}
+					// this.ws.onopen = ()=>{
+					// 	printLog({
+					// 		text: 'Connected to WebSocket server!'
+					// 	});
+					// }
 					// 监听获取的数据
-					this.ws.onmessage = (event) => {
-					    printLog({
-					    	text: event.data,
-					    });
-					};
+					// this.ws.onmessage = (event) => {
+					//     printLog({
+					//     	text: event.data,
+					//     });
+					// };
 
 					// 监听视频画质切换
 					window.addEventListener('videoQuality', event => {
 						console.log(event.detail.quality)
 						if (event.detail.quality) {
 							imgToggle('HD', '../static/img/hd-on.png');
-							printLog({
-								text: 'HD显示！'
-							});
+							// printLog({
+							// 	text: 'HD显示！'
+							// });
+							mui.toast("HD显示！", {
+								duration: 1500,
+								type: "div"
+							})
 						} else {
 							imgToggle('HD', '../static/img/hd-off.png');
-							printLog({
-								text: '取消HD显示！'
-							});
+							// printLog({
+							// 	text: '取消HD显示！'
+							// });
+							mui.toast("取消HD显示！", {
+								duration: 1500,
+								type: "div"
+							})
 						}
 						let loading = plus.nativeUI.showWaiting()
 						this.player.changePlayUrl({
@@ -416,16 +542,24 @@
 							state
 						} = event.detail;
 						if (state) {
-							printLog({
-								level: 'device',
-								text: 'bluetooth is opened'
-							});
+							// printLog({
+							// 	level: 'device',
+							// 	text: 'bluetooth is opened'
+							// });
+							mui.toast("bluetooth is opened！", {
+								duration: 1500,
+								type: "div"
+							})
 							imgToggle('bluetooth', '../static/img/bluetooth-on.png');
 						} else {
-							printLog({
-								level: 'device',
-								text: 'bluetooth is closed'
-							});
+							// printLog({
+							// 	level: 'device',
+							// 	text: 'bluetooth is closed'
+							// });
+							mui.toast("bluetooth is closed！", {
+								duration: 1500,
+								type: "div"
+							})
 							imgToggle('bluetooth', '../static/img/bluetooth-off.png');
 						}
 					});
@@ -435,9 +569,15 @@
 						const {
 							selectedDeviceName
 						} = event.detail;
-						printLog({
-							text: `${selectedDeviceName}已连接`
-						});
+						// printLog({
+						// 	text: `${selectedDeviceName}已连接`
+						// });
+						console.log(selectedDeviceName)
+						this.selectedDevice = selectedDeviceName;
+						mui.toast(`${selectedDeviceName}已连接!`, {
+							duration: 1500,
+							type: "div"
+						})
 					});
 
 					// 监听异常数据
@@ -445,10 +585,14 @@
 						const {
 							message
 						} = event.detail;
-						printLog({
-							level: 'error',
-							text: message
-						});
+						// printLog({
+						// 	level: 'error',
+						// 	text: message
+						// });
+						mui.toast(message , {
+							duration: 1500,
+							type: "div"
+						})
 					});
 
 					// 监听接收到蓝牙数据
@@ -456,9 +600,13 @@
 						const {
 							data
 						} = event.detail;
-						printLog({
-							text: data
-						});
+						// printLog({
+						// 	text: data
+						// });
+						mui.toast(data , {
+							duration: 1500,
+							type: "div"
+						})
 					});
 					
 					// 监听虚拟按键的显示
@@ -486,18 +634,34 @@
 					const { initUsrSDK, listenDataOfDevice, listenBattery, listenNetStatus } = UsrCloud_Tools();
 					const res = await initUsrSDK(UsrAppkey, UsrAppSecret);
 					if(!res.code){
-						printLog({text:'init SDK failed'});
+						// printLog({text:'init SDK failed'});
+						mui.toast("init SDK failed！", {
+							duration: 1500,
+							type: "div"
+						})
 						return;
 					}
-					printLog({text:'init SDK success'});
+					// printLog({text:'init SDK success'});
+					mui.toast("init SDK success！", {
+						duration: 1500,
+						type: "div"
+					})
 					// 监听设备透传数据
 					listenDataOfDevice([T1DeviceNo], (res)=>{
 						const { code, data } = res;
 						if(!code){
-							printLog({text:'listen data failed'});
+							// printLog({text:'listen data failed'});
+							mui.toast("listen data failed！", {
+								duration: 1500,
+								type: "div"
+							})
 							return;
 						}
-						printLog({text:data});
+						// printLog({text:data});
+						mui.toast(data , {
+							duration: 1500,
+							type: "div"
+						})
 					});
 					// 监听设备电量
 					listenBattery([T1DeviceNo], (res)=>{
@@ -531,9 +695,13 @@
 						})
 					if (quality) {
 						imgToggle('HD', '../static/img/hd-on.png');
-						printLog({
-							text: 'HD显示！'
-						});
+						// printLog({
+						// 	text: 'HD显示！'
+						// });
+						mui.toast("HD显示！", {
+							duration: 1500,
+							type: "div"
+						})
 					}
 				},
 				setting() {
@@ -562,7 +730,11 @@
 				sendData(){
 					// const { sendDataToDevice } = UsrCloud_Tools();
 					const { printLog } = Tools();
-					printLog({ text:'send message' });
+					// printLog({ text:'send message' });
+					mui.toast("send message！", {
+						duration: 1500,
+						type: "div"
+					})
 					this.ws.send('app hello world');
 				},
 				
@@ -570,7 +742,11 @@
 				queryBattery(){
 					const { quertDeviceBattery } = UsrCloud_Tools();
 					const { printLog } = Tools();
-					printLog({ text:'query device battery' });
+					// printLog({ text:'query device battery' });
+					mui.toast("query device battery！", {
+						duration: 1500,
+						type: "div"
+					})
 					quertDeviceBattery(T1DeviceNo);
 					
 					// const { quertNetStatus } = UsrCloud_Tools();

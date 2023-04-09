@@ -9,6 +9,6 @@ const UsrAppSecret = 'ofw3woakvtb4b9u37bzpwrlcf21hj6qq';
 const T1DeviceNo = '00002000140384000001'; //T1的设备编号
 const stopContralUrl = 'https://open.ys7.com/api/lapp/device/ptz/stop';
 const startContralUrl = 'https://open.ys7.com/api/lapp/device/ptz/start';
-const initSettingFile = '{"quality":false,"openBluetooth":false,"selectedDevice":{"name":"null","address":"null"},"camera":{"asyncBlu":true,"virtualButton":false,"speed":"1"}}';
+const initSettingFile = '{"quality":false,"openBluetooth":false,"ScreenMode":"录制模式","MapMode":"导航模式","PowerNum":0,"VehiceSpeed":0,"LocalStatus":"正常","MapStatus":"正常","selectedDevice":{"name":"null","address":"null"},"camera":{"asyncBlu":true,"virtualButton":false,"speed":"1"}}';
 const AliyWebSocketServerIP = '118.190.157.135';
 const AliyWebSocketServerPORT = '14998';

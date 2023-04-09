@@ -54,7 +54,11 @@ function Tools() {
 				type: "div"
 			})
 		}
-		printLog({level:'device', text:net});
+		// printLog({level:'device', text:net});
+		mui.toast(net, {
+			duration: 1500,
+			type: "div"
+		})
 		return net;
 	};
 	
@@ -215,13 +219,17 @@ function Tools() {
 		player = new EZUIKit.EZUIKitPlayer({
 			autoplay: true, // 默认播放
 			id: "ezvizvideo",
-			accessToken:'ra.37dww3eb9d9aigue9ctqkuid98txv49s-5q6qu5vby0-1wl02lu-ulvmnopb4',
+			accessToken:'ra.52gypyk3ask3fw7a41fqniwl7xh75sv4-99sqitt0rn-0iig6v0-hb0yyn33m',
 			url:'ezopen://open.ys7.com/G39444019/1.live',
 			template: "simple",
 			width,
 			height,
 			handleSuccess: (e) => {
-				printLog({ text:'视频初始化成功！'})
+				// printLog({ text:'视频初始化成功！'})
+				mui.toast("视频初始化成功！", {
+					duration: 1500,
+					type: "div"
+				})
 			}
 		});
 		return player;
